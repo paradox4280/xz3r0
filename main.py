@@ -13,14 +13,14 @@ class Config:
 
 
 start_time = datetime.datetime.utcnow()
-config = Config(**dotenv_values('.env'))
+config = Config(**dotenv_values())
 
 app = Bottle()
 
 
 @app.route('/', method='GET')
 @app.route('/health', method='GET')
-def health():
+def health() -> dict[str, str]:
     uptime = datetime.datetime.utcnow() - start_time
     return {'status': 'UP', 'uptime': str(uptime).split('.')[0]}
 
@@ -33,8 +33,8 @@ def show_ip() -> dict[str, str]:
 @app.route('/notify', method='POST')
 def notify() -> None:
     message = request.body.read().decode('ascii')
-    params = {'chat_id': config.CHAT_ID,'text': message}
-    url = f'https://api.telegram.org/bot{config.BOT_TOKEN}/sendMessage?{params}'
+    params = {'chat_id': config.CHAT_ID, 'text': message}
+    url = f'https://api.telegram.org/bot{config.BOT_TOKEN}/sendMessage'
     requests.get(url, data=params)
 
 
