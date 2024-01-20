@@ -1,4 +1,5 @@
 import requests
+import datetime
 
 from dotenv import dotenv_values
 from dataclasses import dataclass
@@ -11,14 +12,17 @@ class Config:
     BOT_TOKEN: str | None
 
 
+start_time = datetime.datetime.utcnow()
 config = Config(**dotenv_values('.env'))
 
 app = Bottle()
 
 
-@app.route('/ping', method='GET')
-def ping():
-    return {'message': 'ok'}
+@app.route('/', method='GET')
+@app.route('/health', method='GET')
+def health():
+    uptime = datetime.datetime.utcnow() - start_time
+    return {'status': 'UP', 'uptime': str(uptime).split('.')[0]}
 
 
 @app.route('/myip', method='GET')
