@@ -35,4 +35,4 @@ def notify() -> None:
 
 
 if __name__ == '__main__':
-    run(app, host='localhost', debug=False)
+    run(app, host='0.0.0.0', port=8182, debug=False)
